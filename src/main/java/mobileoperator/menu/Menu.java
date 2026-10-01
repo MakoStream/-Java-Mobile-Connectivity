@@ -3,9 +3,13 @@ package mobileoperator.menu;
 import java.io.IOException;
 import java.util.List;
 
+import mobileoperator.menu.items.InputMenuItem;
+import mobileoperator.menu.items.SelectMenuItem;
+
+import org.jline.terminal.Terminal;
+
 import org.jline.keymap.BindingReader;
 import org.jline.keymap.KeyMap;
-import org.jline.terminal.Terminal;
 import org.jline.utils.InfoCmp.Capability;
 
 public abstract class Menu {
@@ -26,7 +30,7 @@ public abstract class Menu {
         return items;
     }
 
-    public abstract void show();
+    public abstract MenuResult show(Terminal terminal);
 
     protected int selectItem(
             Terminal terminal,
@@ -56,15 +60,76 @@ public abstract class Menu {
                 )
         );
 
+        // Стрілка вліво
+        keyMap.bind(
+                "LEFT",
+                KeyMap.key(
+                        terminal,
+                        Capability.key_left
+                )
+        );
+
+        // Стрілка вправо
+        keyMap.bind(
+                "RIGHT",
+                KeyMap.key(
+                        terminal,
+                        Capability.key_right
+                )
+        );
+
         // Enter
         keyMap.bind("ENTER", "\r");
         keyMap.bind("ENTER", "\n");
+        keyMap.bind("ESC", "\033");
+
+        // Backspace
+        keyMap.bind("BACKSPACE", "\b");
+        keyMap.bind("BACKSPACE", "\u007f");
+
+        // Delete
+        keyMap.bind(
+                "DELETE",
+                KeyMap.key(
+                        terminal,
+                        Capability.key_dc
+                )
+        );
+
+        /*
+         * Дозволяємо BindingReader повертати звичайні
+         * символи, які не були окремо прив'язані.
+         */
+        keyMap.setUnicode("CHAR");
+        keyMap.setNomatch("CHAR");
 
         while (true) {
 
             draw(terminal, selectedIndex);
 
             String key = bindingReader.readBinding(keyMap);
+
+            MenuItem selectedItem = items.get(selectedIndex);
+
+            /*
+             * Звичайний символ.
+             *
+             * Якщо вибране поле введення,
+             * передаємо символ у нього.
+             */
+            if ("CHAR".equals(key)) {
+
+                String lastBinding = bindingReader.getLastBinding();
+
+                if (selectedItem instanceof InputMenuItem input
+                        && lastBinding != null
+                        && lastBinding.length() == 1) {
+
+                    input.insert(lastBinding.charAt(0));
+                }
+
+                continue;
+            }
 
             if ("UP".equals(key)) {
 
@@ -84,7 +149,52 @@ public abstract class Menu {
                 }
             }
 
+            else if ("LEFT".equals(key)) {
+
+                if (selectedItem instanceof InputMenuItem input) {
+                    input.moveCursorLeft();
+                }
+
+                else if (selectedItem instanceof SelectMenuItem select) {
+                    select.selectPrevious();
+                }
+            }
+
+            else if ("RIGHT".equals(key)) {
+
+                if (selectedItem instanceof InputMenuItem input) {
+                    input.moveCursorRight();
+                }
+
+                else if (selectedItem instanceof SelectMenuItem select) {
+                    select.selectNext();
+                }
+            }
+
+            else if ("BACKSPACE".equals(key)) {
+
+                if (selectedItem instanceof InputMenuItem input) {
+                    input.backspace();
+                }
+            }
+
+            else if ("DELETE".equals(key)) {
+
+                if (selectedItem instanceof InputMenuItem input) {
+                    input.delete();
+                }
+            }
+
+            else if ("ESC".equals(key)) {
+                return -1;
+            }
+
             else if ("ENTER".equals(key)) {
+
+                if (selectedItem instanceof InputMenuItem) {
+                    continue;
+                }
+
                 return selectedIndex;
             }
         }
@@ -108,10 +218,20 @@ public abstract class Menu {
 
         for (int i = 0; i < items.size(); i++) {
 
-            if (i == selectedIndex) {
-                writer.println("> " + items.get(i).getTitle());
+            MenuItem item = items.get(i);
+
+            String displayText;
+
+            if (item instanceof InputMenuItem input) {
+                displayText = input.getDisplayText(i == selectedIndex);
             } else {
-                writer.println("  " + items.get(i).getTitle());
+                displayText = item.getDisplayText();
+            }
+
+            if (i == selectedIndex) {
+                writer.println("> " + displayText);
+            } else {
+                writer.println("  " + displayText);
             }
         }
 
