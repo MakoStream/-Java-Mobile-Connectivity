@@ -6,9 +6,10 @@ import java.util.List;
 import mobileoperator.menu.items.InputMenuItem;
 import mobileoperator.menu.items.SelectMenuItem;
 
+import org.jline.terminal.Terminal;
+
 import org.jline.keymap.BindingReader;
 import org.jline.keymap.KeyMap;
-import org.jline.terminal.Terminal;
 import org.jline.utils.InfoCmp.Capability;
 
 public abstract class Menu {
@@ -29,7 +30,7 @@ public abstract class Menu {
         return items;
     }
 
-    public abstract void show();
+    public abstract MenuResult show(Terminal terminal);
 
     protected int selectItem(
             Terminal terminal,
@@ -80,6 +81,7 @@ public abstract class Menu {
         // Enter
         keyMap.bind("ENTER", "\r");
         keyMap.bind("ENTER", "\n");
+        keyMap.bind("ESC", "\033");
 
         // Backspace
         keyMap.bind("BACKSPACE", "\b");
@@ -183,7 +185,11 @@ public abstract class Menu {
                 }
             }
 
-           else if ("ENTER".equals(key)) {
+            else if ("ESC".equals(key)) {
+                return -1;
+            }
+
+            else if ("ENTER".equals(key)) {
 
                 if (selectedItem instanceof InputMenuItem) {
                     continue;

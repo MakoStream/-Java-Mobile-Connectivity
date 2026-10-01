@@ -2,10 +2,19 @@ package mobileoperator;
 
 import java.util.List;
 
+import mobileoperator.menus.MainMenu;
+import mobileoperator.menus.TariffsMenu;
+import mobileoperator.menu.MenuController;
+import mobileoperator.menu.MenuItem;
+import mobileoperator.menu.items.ButtonMenuItem;
+import mobileoperator.menu.items.CheckboxMenuItem;
 import mobileoperator.menu.items.InputMenuItem;
 import mobileoperator.menu.items.SelectMenuItem;
-import mobileoperator.menu.MainMenu;
-import mobileoperator.menu.MenuItem;
+
+// import org.jline.terminal.Terminal;
+
+// import java.io.IOException;
+// import java.util.List;
 
 public class Main {
 
@@ -13,41 +22,20 @@ public class Main {
 
         List<MenuItem> menuItems = List.of(
 
-                new MenuItem("Список тарифів") {
-                    @Override
-                    public void execute() {
-                        System.out.println();
-                        System.out.println("Ви обрали: Список тарифів");
-                    }
-                },
-                new InputMenuItem(
-                        "Мінімальна ціна",
-                        "35345",
-                        true,
-                        10
+                new ButtonMenuItem(
+                        "Тарифи",
+                        () -> {
+                        },
+                        new TariffsMenu()
                 ),
-
-                new InputMenuItem(
-                        "Текст",
-                        "Amogus",
-                        false,
-                        255
-                ),
-                new SelectMenuItem(
-                    "Компанія",
-                    List.of(
-                            "Kyivstar",
-                            "Vodafone",
-                            "lifecell"
-                    ),
-                    0
-            ),
 
                 new MenuItem("Загальна кількість клієнтів") {
                     @Override
                     public void execute() {
                         System.out.println();
-                        System.out.println("Ви обрали: Загальна кількість клієнтів");
+                        System.out.println(
+                                "Ви обрали: Загальна кількість клієнтів"
+                        );
                     }
                 },
 
@@ -55,7 +43,9 @@ public class Main {
                     @Override
                     public void execute() {
                         System.out.println();
-                        System.out.println("Ви обрали: Сортування тарифів");
+                        System.out.println(
+                                "Ви обрали: Сортування тарифів"
+                        );
                     }
                 },
 
@@ -63,21 +53,48 @@ public class Main {
                     @Override
                     public void execute() {
                         System.out.println();
-                        System.out.println("Ви обрали: Пошук тарифу");
+                        System.out.println(
+                                "Ви обрали: Пошук тарифу"
+                        );
                     }
                 },
+
+                new InputMenuItem(
+                        "Мінімальна ціна",
+                        "35345",
+                        true,
+                        10
+                ),
+
+                new SelectMenuItem(
+                        "Компанія",
+                        List.of(
+                                "Kyivstar",
+                                "Vodafone",
+                                "lifecell"
+                        ),
+                        0
+                ),
+                new CheckboxMenuItem(
+                        "Лише доступні",
+                        true
+                ),
 
                 new MenuItem("Вихід") {
                     @Override
                     public void execute() {
                         System.out.println();
-                        System.out.println("Вихід з програми.");
+                        System.out.println(
+                                "Вихід з програми."
+                        );
                     }
                 }
         );
 
         MainMenu mainMenu = new MainMenu(menuItems);
 
-        mainMenu.show();
+        MenuController menuController = new MenuController();
+
+        menuController.start(mainMenu);
     }
 }
