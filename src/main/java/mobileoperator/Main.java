@@ -2,6 +2,8 @@ package mobileoperator;
 
 import java.util.List;
 
+import mobileoperator.menu.items.InputMenuItem;
+import mobileoperator.menu.items.SelectMenuItem;
 import mobileoperator.menu.MainMenu;
 import mobileoperator.menu.MenuItem;
 
@@ -18,6 +20,28 @@ public class Main {
                         System.out.println("Ви обрали: Список тарифів");
                     }
                 },
+                new InputMenuItem(
+                        "Мінімальна ціна",
+                        "35345",
+                        true,
+                        10
+                ),
+
+                new InputMenuItem(
+                        "Текст",
+                        "Amogus",
+                        false,
+                        255
+                ),
+                new SelectMenuItem(
+                    "Компанія",
+                    List.of(
+                            "Kyivstar",
+                            "Vodafone",
+                            "lifecell"
+                    ),
+                    0
+            ),
 
                 new MenuItem("Загальна кількість клієнтів") {
                     @Override
