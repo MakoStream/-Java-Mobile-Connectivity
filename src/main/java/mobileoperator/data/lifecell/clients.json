@@ -1,0 +1,46 @@
+{
+  "clients": [
+    {
+      "id": 1,
+      "firstName": "Олена",
+      "lastName": "Мороз",
+      "phoneNumber": "+380631234567",
+      "tariffId": 1
+    },
+    {
+      "id": 2,
+      "firstName": "Богдан",
+      "lastName": "Лисенко",
+      "phoneNumber": "+380632345678",
+      "tariffId": 3
+    },
+    {
+      "id": 3,
+      "firstName": "Аліна",
+      "lastName": "Романенко",
+      "phoneNumber": "+380633456789",
+      "tariffId": 2
+    },
+    {
+      "id": 4,
+      "firstName": "Назар",
+      "lastName": "Савченко",
+      "phoneNumber": "+380634567890",
+      "tariffId": 1
+    },
+    {
+      "id": 5,
+      "firstName": "Вікторія",
+      "lastName": "Коваль",
+      "phoneNumber": "+380635678901",
+      "tariffId": 2
+    },
+    {
+      "id": 6,
+      "firstName": "Тарас",
+      "lastName": "Поліщук",
+      "phoneNumber": "+380636789012",
+      "tariffId": 3
+    }
+  ]
+}

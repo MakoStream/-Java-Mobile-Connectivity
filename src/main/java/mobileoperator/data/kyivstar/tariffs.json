@@ -1,0 +1,36 @@
+{
+  "tariffs": [
+    {
+      "id": 1,
+      "name": "LOVE UA",
+      "monthlyFee": 350,
+      "minutes": 1200,
+      "sms": 100,
+      "internetGb": 25
+    },
+    {
+      "id": 2,
+      "name": "LOVE UA PLUS",
+      "monthlyFee": 500,
+      "minutes": 2000,
+      "sms": 200,
+      "internetGb": 50
+    },
+    {
+      "id": 2,
+      "name": "Для Пенсіонерів",
+      "monthlyFee": 999999,
+      "minutes": 2000,
+      "sms": 200,
+      "internetGb": 50
+    },
+    {
+      "id": 3,
+      "name": "LOVE UA MAX",
+      "monthlyFee": 700,
+      "minutes": 3000,
+      "sms": 300,
+      "internetGb": 100
+    }
+  ]
+}

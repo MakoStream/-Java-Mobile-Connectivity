@@ -1,0 +1,28 @@
+{
+  "tariffs": [
+    {
+      "id": 1,
+      "name": "Просто Лайф",
+      "monthlyFee": 200,
+      "minutes": 700,
+      "sms": 50,
+      "internetGb": 15
+    },
+    {
+      "id": 2,
+      "name": "Вільний Лайф",
+      "monthlyFee": 350,
+      "minutes": 1500,
+      "sms": 100,
+      "internetGb": 50
+    },
+    {
+      "id": 3,
+      "name": "Максі Лайф",
+      "monthlyFee": 450,
+      "minutes": 2500,
+      "sms": 200,
+      "internetGb": 100
+    }
+  ]
+}

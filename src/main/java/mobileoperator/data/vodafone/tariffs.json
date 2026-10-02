@@ -1,0 +1,28 @@
+{
+  "tariffs": [
+    {
+      "id": 1,
+      "name": "Joice Start",
+      "monthlyFee": 250,
+      "minutes": 800,
+      "sms": 50,
+      "internetGb": 20
+    },
+    {
+      "id": 2,
+      "name": "Joice",
+      "monthlyFee": 350,
+      "minutes": 1200,
+      "sms": 100,
+      "internetGb": 40
+    },
+    {
+      "id": 3,
+      "name": "Joice Max",
+      "monthlyFee": 500,
+      "minutes": 2000,
+      "sms": 200,
+      "internetGb": 80
+    }
+  ]
+}
