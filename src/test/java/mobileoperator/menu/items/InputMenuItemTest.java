@@ -2,135 +2,57 @@ package mobileoperator.menu.items;
 
 import mobileoperator.testing.TestLogger;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ExtendWith(TestLogger.class)
 class InputMenuItemTest {
-
-    private static final String TEST_CLASS =
-            "InputMenuItemTest";
-
-    @BeforeEach
-    void beforeEach() {
-        TestLogger.operation(
-                TEST_CLASS,
-                "beforeEach",
-                "Підготовка до тесту"
-        );
-    }
 
     @Test
     void shouldStoreInitialValue() {
-
-        String testMethod =
-                "shouldStoreInitialValue";
-
-        TestLogger.startTest(
-                TEST_CLASS,
-                testMethod
-        );
-
-        String title = "Мінімальна ціна";
-        String initialValue = "350";
-        boolean numericOnly = true;
-        int maxLength = 10;
-
-        TestLogger.state(
-                TEST_CLASS,
-                "title",
-                title
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "initialValue",
-                initialValue
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "numericOnly",
-                numericOnly
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "maxLength",
-                maxLength
-        );
+        TestLogger.operation("Створення InputMenuItem");
 
         InputMenuItem item =
                 new InputMenuItem(
-                        title,
-                        initialValue,
-                        numericOnly,
-                        maxLength
+                        "Мінімальна ціна",
+                        "350",
+                        true,
+                        10
                 );
 
-        TestLogger.operation(
-                TEST_CLASS,
-                testMethod,
-                "Створено InputMenuItem"
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "item.value",
-                item.getValue()
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "item.cursorPosition",
-                item.getCursorPosition()
-        );
-
-        String actualValue = item.getValue();
+        TestLogger.state("item.value", item.getValue());
+        TestLogger.state("item.cursorPosition", item.getCursorPosition());
 
         TestLogger.assertion(
                 "Перевірка початкового значення",
                 "350",
-                actualValue
+                item.getValue()
         );
 
         assertEquals(
                 "350",
-                actualValue
+                item.getValue()
         );
 
-        int actualCursorPosition =
-                item.getCursorPosition();
-
         TestLogger.assertion(
-                "Перевірка позиції курсора",
+                "Перевірка початкової позиції курсора",
                 3,
-                actualCursorPosition
+                item.getCursorPosition()
         );
 
         assertEquals(
                 3,
-                actualCursorPosition
-        );
-
-        TestLogger.endTest(
-                TEST_CLASS,
-                testMethod
+                item.getCursorPosition()
         );
     }
 
     @Test
     void shouldInsertCharacter() {
-
-        String testMethod =
-                "shouldInsertCharacter";
-
-        TestLogger.startTest(
-                TEST_CLASS,
-                testMethod
-        );
+        TestLogger.operation("Створення InputMenuItem");
 
         InputMenuItem item =
                 new InputMenuItem(
@@ -140,94 +62,27 @@ class InputMenuItemTest {
                         10
                 );
 
-        TestLogger.state(
-                TEST_CLASS,
-                "initialValue",
-                item.getValue()
-        );
+        TestLogger.operation("Вставка символу '3'");
+        boolean result1 = item.insert('3');
+        TestLogger.state("insert('3') result", result1);
+        TestLogger.state("value", item.getValue());
 
-        TestLogger.state(
-                TEST_CLASS,
-                "initialCursorPosition",
-                item.getCursorPosition()
-        );
+        TestLogger.operation("Вставка символу '5'");
+        boolean result2 = item.insert('5');
+        TestLogger.state("insert('5') result", result2);
+        TestLogger.state("value", item.getValue());
 
-        boolean result;
+        TestLogger.operation("Вставка символу '0'");
+        boolean result3 = item.insert('0');
+        TestLogger.state("insert('0') result", result3);
+        TestLogger.state("value", item.getValue());
 
-        result = item.insert('3');
-
-        TestLogger.operation(
-                TEST_CLASS,
-                testMethod,
-                "Вставка символу '3'"
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "insertResult",
-                result
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "valueAfter3",
-                item.getValue()
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "cursorAfter3",
-                item.getCursorPosition()
-        );
-
-        assertTrue(result);
-
-        result = item.insert('5');
-
-        TestLogger.operation(
-                TEST_CLASS,
-                testMethod,
-                "Вставка символу '5'"
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "valueAfter5",
-                item.getValue()
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "cursorAfter5",
-                item.getCursorPosition()
-        );
-
-        assertTrue(result);
-
-        result = item.insert('0');
-
-        TestLogger.operation(
-                TEST_CLASS,
-                testMethod,
-                "Вставка символу '0'"
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "valueAfter0",
-                item.getValue()
-        );
-
-        TestLogger.state(
-                TEST_CLASS,
-                "cursorAfter0",
-                item.getCursorPosition()
-        );
-
-        assertTrue(result);
+        assertTrue(result1);
+        assertTrue(result2);
+        assertTrue(result3);
 
         TestLogger.assertion(
-                "Перевірка кінцевого значення",
+                "Перевірка результату вставки",
                 "350",
                 item.getValue()
         );
@@ -236,10 +91,135 @@ class InputMenuItemTest {
                 "350",
                 item.getValue()
         );
+    }
 
-        TestLogger.endTest(
-                TEST_CLASS,
-                testMethod
+    @Test
+    void shouldRejectNonNumericCharacter() {
+        TestLogger.operation("Створення InputMenuItem");
+
+        InputMenuItem item =
+                new InputMenuItem(
+                        "Ціна",
+                        "",
+                        true,
+                        10
+                );
+
+        TestLogger.operation("Спроба вставити нечисловий символ 'a'");
+
+        boolean result = item.insert('a');
+
+        TestLogger.state("insert('a') result", result);
+        TestLogger.state("value", item.getValue());
+
+        assertFalse(result);
+
+        TestLogger.assertion(
+                "Значення не повинно змінитися",
+                "",
+                item.getValue()
+        );
+
+        assertEquals(
+                "",
+                item.getValue()
+        );
+    }
+
+    @Test
+    void shouldRespectMaximumLength() {
+        TestLogger.operation("Створення InputMenuItem з maxLength=3");
+
+        InputMenuItem item =
+                new InputMenuItem(
+                        "Ціна",
+                        "",
+                        true,
+                        3
+                );
+
+        TestLogger.operation("Вставка '1'");
+        assertTrue(item.insert('1'));
+
+        TestLogger.operation("Вставка '2'");
+        assertTrue(item.insert('2'));
+
+        TestLogger.operation("Вставка '3'");
+        assertTrue(item.insert('3'));
+
+        TestLogger.operation("Спроба вставити четвертий символ '4'");
+
+        boolean result = item.insert('4');
+
+        TestLogger.state("insert('4') result", result);
+        TestLogger.state("value", item.getValue());
+
+        assertFalse(result);
+
+        TestLogger.assertion(
+                "Перевірка максимальної довжини",
+                "123",
+                item.getValue()
+        );
+
+        assertEquals(
+                "123",
+                item.getValue()
+        );
+    }
+
+    @Test
+    void shouldMoveCursorAndDeleteCharacter() {
+        TestLogger.operation("Створення InputMenuItem зі значенням 123");
+
+        InputMenuItem item =
+                new InputMenuItem(
+                        "Ціна",
+                        "123",
+                        true,
+                        10
+                );
+
+        TestLogger.state(
+                "initial value",
+                item.getValue()
+        );
+
+        TestLogger.state(
+                "initial cursorPosition",
+                item.getCursorPosition()
+        );
+
+        TestLogger.operation("Переміщення курсора вліво");
+        item.moveCursorLeft();
+
+        TestLogger.state(
+                "cursorPosition after moveLeft",
+                item.getCursorPosition()
+        );
+
+        TestLogger.operation("Видалення символу через backspace");
+        item.backspace();
+
+        TestLogger.state(
+                "value after backspace",
+                item.getValue()
+        );
+
+        TestLogger.state(
+                "cursorPosition after backspace",
+                item.getCursorPosition()
+        );
+
+        TestLogger.assertion(
+                "Перевірка значення після видалення",
+                "13",
+                item.getValue()
+        );
+
+        assertEquals(
+                "13",
+                item.getValue()
         );
     }
 }
