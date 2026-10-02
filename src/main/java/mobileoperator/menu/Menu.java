@@ -3,13 +3,13 @@ package mobileoperator.menu;
 import java.io.IOException;
 import java.util.List;
 
+import mobileoperator.logging.OperationLogger;
 import mobileoperator.menu.items.InputMenuItem;
 import mobileoperator.menu.items.SelectMenuItem;
 
-import org.jline.terminal.Terminal;
-
 import org.jline.keymap.BindingReader;
 import org.jline.keymap.KeyMap;
+import org.jline.terminal.Terminal;
 import org.jline.utils.InfoCmp.Capability;
 
 public abstract class Menu {
@@ -20,6 +20,12 @@ public abstract class Menu {
     protected Menu(String title, List<MenuItem> items) {
         this.title = title;
         this.items = items;
+
+        OperationLogger.operation(
+                "Menu",
+                "constructor",
+                "title='" + title + "', items=" + items.size()
+        );
     }
 
     public String getTitle() {
@@ -42,7 +48,6 @@ public abstract class Menu {
 
         KeyMap<String> keyMap = new KeyMap<>();
 
-        // Стрілка вгору
         keyMap.bind(
                 "UP",
                 KeyMap.key(
@@ -51,7 +56,6 @@ public abstract class Menu {
                 )
         );
 
-        // Стрілка вниз
         keyMap.bind(
                 "DOWN",
                 KeyMap.key(
@@ -60,7 +64,6 @@ public abstract class Menu {
                 )
         );
 
-        // Стрілка вліво
         keyMap.bind(
                 "LEFT",
                 KeyMap.key(
@@ -69,7 +72,6 @@ public abstract class Menu {
                 )
         );
 
-        // Стрілка вправо
         keyMap.bind(
                 "RIGHT",
                 KeyMap.key(
@@ -78,16 +80,13 @@ public abstract class Menu {
                 )
         );
 
-        // Enter
         keyMap.bind("ENTER", "\r");
         keyMap.bind("ENTER", "\n");
         keyMap.bind("ESC", "\033");
 
-        // Backspace
         keyMap.bind("BACKSPACE", "\b");
         keyMap.bind("BACKSPACE", "\u007f");
 
-        // Delete
         keyMap.bind(
                 "DELETE",
                 KeyMap.key(
@@ -96,10 +95,6 @@ public abstract class Menu {
                 )
         );
 
-        /*
-         * Дозволяємо BindingReader повертати звичайні
-         * символи, які не були окремо прив'язані.
-         */
         keyMap.setUnicode("CHAR");
         keyMap.setNomatch("CHAR");
 
@@ -111,12 +106,6 @@ public abstract class Menu {
 
             MenuItem selectedItem = items.get(selectedIndex);
 
-            /*
-             * Звичайний символ.
-             *
-             * Якщо вибране поле введення,
-             * передаємо символ у нього.
-             */
             if ("CHAR".equals(key)) {
 
                 String lastBinding = bindingReader.getLastBinding();
@@ -133,20 +122,36 @@ public abstract class Menu {
 
             if ("UP".equals(key)) {
 
+                int oldIndex = selectedIndex;
+
                 selectedIndex--;
 
                 if (selectedIndex < 0) {
                     selectedIndex = items.size() - 1;
                 }
+
+                OperationLogger.operation(
+                        "Menu",
+                        "selectItem",
+                        "UP: " + oldIndex + " -> " + selectedIndex
+                );
             }
 
             else if ("DOWN".equals(key)) {
+
+                int oldIndex = selectedIndex;
 
                 selectedIndex++;
 
                 if (selectedIndex >= items.size()) {
                     selectedIndex = 0;
                 }
+
+                OperationLogger.operation(
+                        "Menu",
+                        "selectItem",
+                        "DOWN: " + oldIndex + " -> " + selectedIndex
+                );
             }
 
             else if ("LEFT".equals(key)) {
@@ -186,6 +191,13 @@ public abstract class Menu {
             }
 
             else if ("ESC".equals(key)) {
+
+                OperationLogger.result(
+                        "Menu",
+                        "selectItem",
+                        "ESC -> -1"
+                );
+
                 return -1;
             }
 
@@ -194,6 +206,13 @@ public abstract class Menu {
                 if (selectedItem instanceof InputMenuItem) {
                     continue;
                 }
+
+                OperationLogger.result(
+                        "Menu",
+                        "selectItem",
+                        "ENTER -> index=" + selectedIndex
+                                + ", item='" + selectedItem.getTitle() + "'"
+                );
 
                 return selectedIndex;
             }

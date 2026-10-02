@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.jline.terminal.Terminal;
 
-import mobileoperator.menus.TariffsMenu;
 import mobileoperator.menu.items.ButtonMenuItem;
 
 import mobileoperator.menu.Menu;
