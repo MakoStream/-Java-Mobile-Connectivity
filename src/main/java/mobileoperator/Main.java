@@ -5,6 +5,8 @@ import java.nio.file.Path;
 import java.util.List;
 
 import mobileoperator.menus.MainMenu;
+import mobileoperator.menus.SortingMenu;
+import mobileoperator.menus.StatisticsMenu;
 import mobileoperator.menus.TariffsMenu;
 import mobileoperator.menu.MenuController;
 import mobileoperator.menu.MenuItem;
@@ -29,53 +31,19 @@ public class Main {
                             new TariffsMenu(applicationData)
                     ),
 
-                    new MenuItem(
-                            "Загальна кількість клієнтів"
-                    ) {
-                        @Override
-                        public void execute() {
-                            System.out.println();
-                            System.out.println(
-                                    "Загальна кількість клієнтів: "
-                                            + applicationData
-                                            .getTotalClientCount()
-                            );
-                        }
-                    },
+                    new ButtonMenuItem(
+                            "Статистика",
+                            () -> {
+                            },
+                            new StatisticsMenu(applicationData)
+                    ),
 
-                    new MenuItem(
-                            "Сортування тарифів"
-                    ) {
-                        @Override
-                        public void execute() {
-                            System.out.println();
-                            System.out.println(
-                                    "Ви обрали: Сортування тарифів"
-                            );
-                        }
-                    },
-
-                    new MenuItem(
-                            "Пошук тарифу"
-                    ) {
-                        @Override
-                        public void execute() {
-                            System.out.println();
-                            System.out.println(
-                                    "Ви обрали: Пошук тарифу"
-                            );
-                        }
-                    },
-
-                    new MenuItem("Вихід") {
-                        @Override
-                        public void execute() {
-                            System.out.println();
-                            System.out.println(
-                                    "Вихід з програми."
-                            );
-                        }
-                    }
+                    new ButtonMenuItem(
+                            "Сортування тарифів",
+                            () -> {
+                            },
+                            new SortingMenu(applicationData)
+                    )
             );
 
             MainMenu mainMenu =

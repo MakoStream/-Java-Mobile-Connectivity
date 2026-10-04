@@ -64,7 +64,7 @@ public class TariffsMenu extends Menu {
             operator.getTariffs().forEach(
                     tariff -> System.out.println(
                             tariff.getName()
-                                    + " — "
+                                    + " - "
                                     + tariff.getMonthlyFee()
                                     + " грн/міс."
                     )

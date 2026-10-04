@@ -88,7 +88,7 @@ public class Tariff {
     @Override
     public String toString() {
         return name
-                + " — "
+                + " - "
                 + monthlyFee
                 + " грн/міс.";
     }
