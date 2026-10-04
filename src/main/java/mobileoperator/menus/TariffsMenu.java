@@ -1,49 +1,79 @@
 package mobileoperator.menus;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jline.terminal.Terminal;
 
+import mobileoperator.ApplicationData;
 import mobileoperator.menu.Menu;
 import mobileoperator.menu.MenuItem;
 import mobileoperator.menu.MenuResult;
-
 import mobileoperator.menu.items.ButtonMenuItem;
+import mobileoperator.model.MobileOperator;
 
 public class TariffsMenu extends Menu {
 
-    public TariffsMenu() {
+    public TariffsMenu(ApplicationData applicationData) {
         super(
                 "Тарифи",
-                List.of(
-                        new ButtonMenuItem(
-                                "Переглянути тарифи",
-                                () -> {
-                                    System.out.println("Перегляд тарифів");
-                                }
-                        ),
+                createItems(applicationData)
+        );
+    }
 
-                        new ButtonMenuItem(
-                                "Додати тариф",
-                                () -> {
-                                    System.out.println("Додавання тарифу");
-                                }
-                        ),
+    private static List<MenuItem> createItems(
+            ApplicationData applicationData
+    ) {
+        List<MenuItem> items = new ArrayList<>();
 
-                        new ButtonMenuItem(
-                                "Видалити тариф",
-                                () -> {
-                                    System.out.println("Видалення тарифу");
-                                }
-                        ),
+        for (MobileOperator operator :
+                applicationData.getOperators()) {
 
-                        new ButtonMenuItem(
-                                "Повернутися назад",
-                                () -> {
-                                }
-                        )
+            items.add(
+                    new ButtonMenuItem(
+                            operator.getName(),
+                            () -> showOperatorTariffs(operator)
+                    )
+            );
+        }
+
+        items.add(
+                new ButtonMenuItem(
+                        "Повернутися назад",
+                        () -> {
+                        }
                 )
+        );
+
+        return items;
+    }
+
+    private static void showOperatorTariffs(
+            MobileOperator operator
+    ) {
+        System.out.println();
+        System.out.println(
+                "Оператор: " + operator.getName()
+        );
+        System.out.println();
+
+        if (operator.getTariffs().isEmpty()) {
+            System.out.println("Тарифів немає.");
+        } else {
+            operator.getTariffs().forEach(
+                    tariff -> System.out.println(
+                            tariff.getName()
+                                    + " — "
+                                    + tariff.getMonthlyFee()
+                                    + " грн/міс."
+                    )
+            );
+        }
+
+        System.out.println();
+        System.out.println(
+                "Натисніть будь-яку клавішу для повернення..."
         );
     }
 
@@ -60,7 +90,6 @@ public class TariffsMenu extends Menu {
                         selectedIndex
                 );
 
-                // Esc
                 if (selectedIndex == -1) {
                     return MenuResult.back();
                 }
@@ -68,12 +97,13 @@ public class TariffsMenu extends Menu {
                 MenuItem selectedItem =
                         getItems().get(selectedIndex);
 
-                // Останній пункт — "Повернутися назад"
                 if (selectedIndex == getItems().size() - 1) {
                     return MenuResult.back();
                 }
 
                 selectedItem.execute();
+
+                terminal.reader().read();
             }
 
         } catch (IOException e) {
