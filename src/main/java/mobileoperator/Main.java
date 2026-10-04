@@ -1,5 +1,7 @@
 package mobileoperator;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import mobileoperator.menus.MainMenu;
@@ -7,94 +9,88 @@ import mobileoperator.menus.TariffsMenu;
 import mobileoperator.menu.MenuController;
 import mobileoperator.menu.MenuItem;
 import mobileoperator.menu.items.ButtonMenuItem;
-import mobileoperator.menu.items.CheckboxMenuItem;
-import mobileoperator.menu.items.InputMenuItem;
-import mobileoperator.menu.items.SelectMenuItem;
-
-// import org.jline.terminal.Terminal;
-
-// import java.io.IOException;
-// import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        List<MenuItem> menuItems = List.of(
+        try {
+            ApplicationData applicationData =
+                    new ApplicationData(
+                            Path.of("data")
+                    );
 
-                new ButtonMenuItem(
-                        "Тарифи",
-                        () -> {
-                        },
-                        new TariffsMenu()
-                ),
+            List<MenuItem> menuItems = List.of(
 
-                new MenuItem("Загальна кількість клієнтів") {
-                    @Override
-                    public void execute() {
-                        System.out.println();
-                        System.out.println(
-                                "Ви обрали: Загальна кількість клієнтів"
-                        );
+                    new ButtonMenuItem(
+                            "Тарифи",
+                            () -> {
+                            },
+                            new TariffsMenu(applicationData)
+                    ),
+
+                    new MenuItem(
+                            "Загальна кількість клієнтів"
+                    ) {
+                        @Override
+                        public void execute() {
+                            System.out.println();
+                            System.out.println(
+                                    "Загальна кількість клієнтів: "
+                                            + applicationData
+                                            .getTotalClientCount()
+                            );
+                        }
+                    },
+
+                    new MenuItem(
+                            "Сортування тарифів"
+                    ) {
+                        @Override
+                        public void execute() {
+                            System.out.println();
+                            System.out.println(
+                                    "Ви обрали: Сортування тарифів"
+                            );
+                        }
+                    },
+
+                    new MenuItem(
+                            "Пошук тарифу"
+                    ) {
+                        @Override
+                        public void execute() {
+                            System.out.println();
+                            System.out.println(
+                                    "Ви обрали: Пошук тарифу"
+                            );
+                        }
+                    },
+
+                    new MenuItem("Вихід") {
+                        @Override
+                        public void execute() {
+                            System.out.println();
+                            System.out.println(
+                                    "Вихід з програми."
+                            );
+                        }
                     }
-                },
+            );
 
-                new MenuItem("Сортування тарифів") {
-                    @Override
-                    public void execute() {
-                        System.out.println();
-                        System.out.println(
-                                "Ви обрали: Сортування тарифів"
-                        );
-                    }
-                },
+            MainMenu mainMenu =
+                    new MainMenu(menuItems);
 
-                new MenuItem("Пошук тарифу") {
-                    @Override
-                    public void execute() {
-                        System.out.println();
-                        System.out.println(
-                                "Ви обрали: Пошук тарифу"
-                        );
-                    }
-                },
+            MenuController menuController =
+                    new MenuController();
 
-                new InputMenuItem(
-                        "Мінімальна ціна",
-                        "35345",
-                        true,
-                        10
-                ),
+            menuController.start(mainMenu);
 
-                new SelectMenuItem(
-                        "Компанія",
-                        List.of(
-                                "Kyivstar",
-                                "Vodafone",
-                                "lifecell"
-                        ),
-                        0
-                ),
-                new CheckboxMenuItem(
-                        "Лише доступні",
-                        true
-                ),
-
-                new MenuItem("Вихід") {
-                    @Override
-                    public void execute() {
-                        System.out.println();
-                        System.out.println(
-                                "Вихід з програми."
-                        );
-                    }
-                }
-        );
-
-        MainMenu mainMenu = new MainMenu(menuItems);
-
-        MenuController menuController = new MenuController();
-
-        menuController.start(mainMenu);
+        } catch (IOException e) {
+            System.err.println(
+                    "Не вдалося завантажити дані: "
+                            + e.getMessage()
+            );
+        }
     }
 }
