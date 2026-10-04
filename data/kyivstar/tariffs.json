@@ -17,7 +17,7 @@
       "internetGb": 50
     },
     {
-      "id": 2,
+      "id": 3,
       "name": "Для Пенсіонерів",
       "monthlyFee": 999999,
       "minutes": 2000,
@@ -25,7 +25,7 @@
       "internetGb": 50
     },
     {
-      "id": 3,
+      "id": 4,
       "name": "LOVE UA MAX",
       "monthlyFee": 700,
       "minutes": 3000,
